@@ -1,0 +1,20 @@
+greeting:
+  message: "hello"
+mp:
+  messaging:
+    outgoing:
+      words-out:
+        address: "words"
+    incoming:
+      words-in:
+        address: "words"
+quarkus:
+  datasource:
+    jdbc: false
+"%dev":
+  quarkus:
+    http:
+      port: 8091
+      test-port: 8091
+      ssl-port: 8453
+      test-ssl-port: 8453
