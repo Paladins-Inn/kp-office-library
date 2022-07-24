@@ -1,0 +1,21 @@
+# Library
+app:
+  name: Paladins Inn Library
+  version: 1.0.0
+
+quarkus:
+  rest-client:
+    library:
+      url: http://library:8080/api
+
+"%dev": &dev
+  quarkus:
+    rest-client:
+      library: &dev-library
+        url: http://localhost:8091/api
+
+    log:
+      console:
+        json: false
+
+"%test": *dev
