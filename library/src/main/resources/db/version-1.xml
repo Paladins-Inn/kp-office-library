@@ -46,11 +46,11 @@
             <column name="cover" type="VARCHAR2(500)"/>
 
             <!-- default value "Book" (UUID 92888c2c-ce59-418f-95cc-9546622924bc) -->
-            <column name="mediumtype" type="BINARY(16)" defaultValueNumeric="161115164954">
+            <column name="mediumtype_id" type="BINARY(16)" defaultValueNumeric="161115164954">
                 <constraints nullable="false" notNullConstraintName="MEDIUMS_TYPE_NN"/>
             </column>
             <!-- default value "virtual" (UUID 245e968a-aa26-4792-835c-d5fd88a3d687) -->
-            <column name="mediumlocation" type="BINARY(16)" defaultValueNumeric="39988671195686">
+            <column name="mediumlocation_id" type="BINARY(16)" defaultValueNumeric="39988671195686">
                 <constraints nullable="false" notNullConstraintName="MEDIUMS_LOCATION_NN"/>
             </column>
         </createTable>
@@ -73,7 +73,9 @@
             </column>
 
             <column name="name" type="VARCHAR2(255)">
-                <constraints nullable="false" notNullConstraintName="MEDIUMTYPES_NAME_NN"/>
+                <constraints nullable="false" notNullConstraintName="MEDIUMTYPES_NAME_NN"
+                             unique="true" uniqueConstraintName="MEDIUMTYPES_NAME_UK"
+                />
             </column>
         </createTable>
 
@@ -94,21 +96,20 @@
             </column>
 
             <column name="name" type="VARCHAR2(255)">
-                <constraints nullable="false" notNullConstraintName="MEDIUMLOCATIONS_NAME_NN"/>
+                <constraints nullable="false" notNullConstraintName="MEDIUMLOCATIONS_NAME_NN"
+                             unique="true" uniqueConstraintName="MEDIUMLOCATIONS_NAME_UK"
+                />
             </column>
         </createTable>
 
         <addForeignKeyConstraint constraintName="MEDIUMS_TYPE_FK"
-                                 baseTableName="mediums" baseColumnNames="mediumtype"
+                                 baseTableName="mediums" baseColumnNames="mediumtype_id"
                                  referencedTableName="mediumtypes" referencedColumnNames="id" />
 
         <addForeignKeyConstraint constraintName="MEDIUMS_LOCATION_FK"
-                                 baseTableName="mediums" baseColumnNames="mediumlocation"
+                                 baseTableName="mediums" baseColumnNames="mediumlocation_id"
                                  referencedTableName="mediumlocations" referencedColumnNames="id" />
 
-        <createIndex tableName="mediums" indexName="MEDIUMS_NAME_IDX">
-            <column name="name"/>
-        </createIndex>
         <createIndex tableName="mediums" indexName="MEDIUMS_CREATED_IDX">
             <column name="created"/>
         </createIndex>
@@ -116,9 +117,6 @@
             <column name="changed"/>
         </createIndex>
 
-        <createIndex tableName="mediumtypes" indexName="MEDIUMTYPES_NAME_IDX">
-            <column name="name"/>
-        </createIndex>
         <createIndex tableName="mediumtypes" indexName="MEDIUMTYPES_CREATED_IDX">
             <column name="created"/>
         </createIndex>
@@ -126,9 +124,6 @@
             <column name="changed"/>
         </createIndex>
 
-        <createIndex tableName="mediumlocations" indexName="MEDIUMLOCATIONS_NAME_IDX">
-            <column name="name"/>
-        </createIndex>
         <createIndex tableName="mediumlocations" indexName="MEDIUMLOCATIONS_CREATED_IDX">
             <column name="created"/>
         </createIndex>
@@ -137,14 +132,14 @@
         </createIndex>
 
         <insert tableName="mediumtypes">
-            <column name="id">161115164954</column>
+            <column name="id">0000161115164954</column>
             <column name="version">0</column>
             <!-- created and changed are default values (CURRENT_TIMESTAMP) -->
             <column name="name">unspecified</column>
         </insert>
 
         <insert tableName="mediumlocations">
-            <column name="id">39988671195686</column>
+            <column name="id">0039988671195686</column>
             <column name="version">0</column>
             <!-- created and changed are default values (CURRENT_TIMESTAMP) -->
             <column name="name">unspecified</column>
@@ -155,11 +150,9 @@
             <dropIndex tableName="mediums" indexName="mediums_created_idx"/>
             <dropIndex tableName="mediums" indexName="mediums_changed_idx"/>
 
-            <dropIndex tableName="mediumtypes" indexName="mediums_name_idx"/>
             <dropIndex tableName="mediumtypes" indexName="mediums_created_idx"/>
             <dropIndex tableName="mediumtypes" indexName="mediums_changed_idx"/>
 
-            <dropIndex tableName="mediumlocations" indexName="mediums_name_idx"/>
             <dropIndex tableName="mediumlocations" indexName="mediums_created_idx"/>
             <dropIndex tableName="mediumlocations" indexName="mediums_changed_idx"/>
 
@@ -168,7 +161,7 @@
 
             <dropTable tableName="mediumlocations"/>
             <dropTable tableName="mediumtypes"/>
-            <dropTable tableName="medums"/>
+            <dropTable tableName="mediums"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

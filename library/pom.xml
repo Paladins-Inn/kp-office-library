@@ -24,6 +24,12 @@
 
   <dependencies>
     <dependency>
+      <groupId>de.kaiserpfalz-edv.office.library</groupId>
+      <artifactId>kp-office-libraray-data</artifactId>
+    </dependency>
+
+
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
     </dependency>
@@ -152,7 +158,7 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-rest-data-panache</artifactId>
+      <artifactId>quarkus-hibernate-orm-rest-data-panache</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
