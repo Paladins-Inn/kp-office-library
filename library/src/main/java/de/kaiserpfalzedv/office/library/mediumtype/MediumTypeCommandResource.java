@@ -21,6 +21,8 @@ import de.kaiserpfalzedv.office.library.model.MediumType;
 import de.kaiserpfalzedv.office.library.security.ApplicationRoles;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.annotation.security.PermitAll;
@@ -52,6 +54,8 @@ import java.util.UUID;
         name = "MediumType Command Resource",
         description = "Write API to MediumTypes"
 )
+@Counted
+@Timed
 public class MediumTypeCommandResource {
     final MediumTypeRepository repository;
 

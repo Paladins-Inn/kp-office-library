@@ -19,6 +19,8 @@ import de.kaiserpfalzedv.office.library.model.Medium;
 import io.quarkus.hibernate.orm.rest.data.panache.PanacheRepositoryResource;
 import io.quarkus.rest.data.panache.MethodProperties;
 import io.quarkus.rest.data.panache.ResourceProperties;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import javax.annotation.security.DenyAll;
 import java.util.UUID;
@@ -34,6 +36,8 @@ import java.util.UUID;
         path = "/api/medium",
         hal = true
 )
+@Counted
+@Timed
 public interface MediumQueryResource extends PanacheRepositoryResource<MediumRepository, Medium, UUID> {
     @MethodProperties(exposed = false)
     boolean delete(UUID id);

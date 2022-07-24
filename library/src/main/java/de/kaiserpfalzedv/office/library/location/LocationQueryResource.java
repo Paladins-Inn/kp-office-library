@@ -19,6 +19,8 @@ import de.kaiserpfalzedv.office.library.model.MediumLocation;
 import io.quarkus.hibernate.orm.rest.data.panache.PanacheRepositoryResource;
 import io.quarkus.rest.data.panache.MethodProperties;
 import io.quarkus.rest.data.panache.ResourceProperties;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.annotation.security.DenyAll;
@@ -40,6 +42,8 @@ import java.util.UUID;
         path = "/api/location",
         hal = true
 )
+@Counted
+@Timed
 public interface LocationQueryResource extends PanacheRepositoryResource<LocationRepository, MediumLocation, UUID> {
     @MethodProperties(exposed = false)
     boolean delete(UUID id);
