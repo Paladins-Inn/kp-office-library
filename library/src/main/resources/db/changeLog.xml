@@ -22,13 +22,4 @@
     https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
     <include file="version-1.xml" relativeToChangelogFile="true"/>
-
-    <changeSet author="quarkus" id="1">
-        <createTable tableName="quarkus">
-            <column name="ID" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="NAME" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
 </databaseChangeLog>
