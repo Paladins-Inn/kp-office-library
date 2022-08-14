@@ -15,14 +15,17 @@
 
 package de.kaiserpfalzedv.office.library.medium;
 
-import de.kaiserpfalzedv.office.library.model.Medium;
-import io.quarkus.hibernate.orm.rest.data.panache.PanacheRepositoryResource;
-import io.quarkus.rest.data.panache.MethodProperties;
+import io.quarkus.panache.common.Sort;
 import io.quarkus.rest.data.panache.ResourceProperties;
+import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import javax.annotation.security.DenyAll;
+import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -31,20 +34,39 @@ import java.util.UUID;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2.0.0  2022-07-24
  */
+@ApplicationScoped
+@RequiredArgsConstructor
 @DenyAll
 @ResourceProperties(
         path = "/api/medium",
         hal = true
 )
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 @Counted
 @Timed
-public interface MediumQueryResource extends PanacheRepositoryResource<MediumRepository, Medium, UUID> {
-    @MethodProperties(exposed = false)
-    boolean delete(UUID id);
+public class MediumQueryResource {
 
-    @MethodProperties(exposed = false)
-    Medium add(Medium location);
+    private final MediumRepository repository;
+    private final MediumMapper mapper;
 
-    @MethodProperties(exposed = false)
-    Medium update(UUID id, Medium location);
+    @GET
+    @Path("{id}")
+    public de.kaiserpfalzedv.office.library.model.Medium get(final @PathParam("id") UUID id) {
+        return mapper.toResource(repository.findById(id));
+    }
+
+    @GET
+    public List<de.kaiserpfalzedv.office.library.model.Medium> list(
+            @QueryParam("sort") List<String> sortQuery,
+            @QueryParam("page") @DefaultValue("0") int pageIndex,
+            @QueryParam("size") @DefaultValue("20") int pageSize
+    ) {
+        Sort sort = Sort.by(sortQuery.toArray(new String[] {}));
+
+        return repository.listAll(sort).stream()
+                .skip(pageIndex).limit(pageSize)
+                .map(mapper::toResource)
+                .toList();
+    }
 }

@@ -16,14 +16,20 @@
 package de.kaiserpfalzedv.office.library.location;
 
 import de.kaiserpfalzedv.office.library.model.MediumLocation;
-import io.quarkus.hibernate.orm.rest.data.panache.PanacheRepositoryResource;
-import io.quarkus.rest.data.panache.MethodProperties;
+import io.quarkus.panache.common.Sort;
 import io.quarkus.rest.data.panache.ResourceProperties;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
+import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -32,25 +38,43 @@ import java.util.UUID;
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
  * @since 2.0.0  2022-07-24
  */
+@ApplicationScoped
+@RequiredArgsConstructor
 @DenyAll
+@Path("/api/location/")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+@Slf4j
 @Schema(
         title = "Location Query Resource",
         name = "Location Query Resource",
         description = "Query API to MediumLocations"
 )
-@ResourceProperties(
-        path = "/api/location",
-        hal = true
-)
 @Counted
 @Timed
-public interface LocationQueryResource extends PanacheRepositoryResource<LocationRepository, MediumLocation, UUID> {
-    @MethodProperties(exposed = false)
-    boolean delete(UUID id);
+public class LocationQueryResource {
+    private final LocationRepository repository;
+    private final MediumLocationMapper mapper;
 
-    @MethodProperties(exposed = false)
-    MediumLocation add(MediumLocation location);
+    @GET
+    @PermitAll
+    @Path("{id}")
+    public MediumLocation get(final @PathParam("id") UUID id) {
+        return mapper.toResource(repository.findById(id));
+    }
 
-    @MethodProperties(exposed = false)
-    MediumLocation update(UUID id, MediumLocation location);
+    @GET
+    @PermitAll
+    public List<MediumLocation> list(
+            @QueryParam("sort") List<String> sortQuery,
+            @QueryParam("page") @DefaultValue("0") int pageIndex,
+            @QueryParam("size") @DefaultValue("20") int pageSize
+    ) {
+        Sort sort = Sort.by(sortQuery.toArray(new String[] {}));
+
+        return repository.listAll(sort).stream()
+                .skip(pageIndex).limit(pageSize)
+                .map(mapper::toResource)
+                .toList();
+    }
 }

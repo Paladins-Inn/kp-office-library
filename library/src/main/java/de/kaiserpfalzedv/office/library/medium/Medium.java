@@ -13,39 +13,53 @@
  * see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.office.library.model;
+package de.kaiserpfalzedv.office.library.medium;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import de.kaiserpfalzedv.office.library.OfficeBaseEntity;
+import de.kaiserpfalzedv.office.library.location.MediumLocation;
+import de.kaiserpfalzedv.office.library.mediumtype.MediumType;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Schema(
-        title = "MediumType",
-        name = "MediumType",
-        description = "Type of the medium"
-)
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Data
 @ToString(callSuper = true)
+@Data
 @Jacksonized
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MediumType extends OfficeBaseEntity {
+@Entity
+@Table(name = "mediums")
+public class Medium extends OfficeBaseEntity {
     private static final long serialVersionUID = 1L;
 
-    @Schema(
-            name = "name",
-            description = "Name of the medium type",
-            maxLength = 255,
-            minLength = 1,
-            required = true
-    )
+    @Column(length = 255, nullable = false)
     @Size(min = 1, max = 255)
     @NotNull
     private String name;
+
+    @Column(length = 1000)
+    @Size(min = 1, max = 1000)
+    private String description;
+
+    @Column(length = 500)
+    @Size(min = 1, max = 500)
+    private String cover;
+
+    @ToString.Exclude
+    @ManyToOne(optional = false)
+    private MediumType mediumtype;
+
+    @ToString.Exclude
+    @ManyToOne(optional = false)
+    private MediumLocation mediumlocation;
 }

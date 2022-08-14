@@ -23,7 +23,6 @@ import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
@@ -31,7 +30,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -56,6 +54,7 @@ import java.util.UUID;
 @Timed
 public class LocationCommandResource {
     final LocationRepository repository;
+    final MediumLocationMapper mapper;
 
     @Transactional
     @POST
@@ -74,14 +73,12 @@ public class LocationCommandResource {
             final String name
     ) {
         repository.persist(
-                MediumLocation.builder()
+                de.kaiserpfalzedv.office.library.location.MediumLocation.builder()
                         .name(name)
                         .build()
         );
 
-        Optional<MediumLocation> result = repository.findByName(name);
-
-        return result.orElse(null);
+        return mapper.toResource(repository.findByName(name).orElse(null));
     }
 
     @Transactional
@@ -108,14 +105,14 @@ public class LocationCommandResource {
             @NotNull
             @Size(min = 1, max = 255)
             final String name) {
-        MediumLocation result = repository
+        de.kaiserpfalzedv.office.library.location.MediumLocation result = repository
                 .findByIdOptional(id)
                 .orElseThrow(NotFoundException::new);
 
         result.setName(name);
         result.persistAndFlush();
 
-        return result;
+        return mapper.toResource(result);
     }
 
     @Transactional

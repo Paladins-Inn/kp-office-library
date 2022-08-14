@@ -15,36 +15,37 @@
 
 package de.kaiserpfalzedv.office.library.librarian.books;
 
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-import de.kaiserpfalzedv.office.library.librarian.LibrarianLayout;
 import de.kaiserpfalzedv.office.library.model.Medium;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import java.util.List;
+import java.util.UUID;
 
 /**
- * ListView --
+ * MediumReaderService --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2.0.0  2022-07-23
+ * @since 1.0.0  2022-08-14
  */
 @Slf4j
-@Route(value = "", layout = LibrarianLayout.class)
-@PageTitle("Books | Paladins Inn Library")
-public class ListView extends VerticalLayout {
-    private ListPresenter presenter;
+@Dependent
+public class MediumReaderService {
+
+    private MediumReaderClient readerClient;
 
     @Inject
-    public ListView(ListPresenter presenter) {
-        this.presenter = presenter;
-        log.info("ListView created. presenter={}", presenter);
+    public MediumReaderService(final MediumReaderClient readerClient) {
+        this.readerClient = readerClient;
+    }
 
-        if (presenter != null) {
-            for (Medium m : presenter.data()) {
-                add(m.getName());
-            }
-        }
+    List<Medium> list() {
+        // FIXME 2022-08-14 klenkes74 100 books should be enough for anybody ...
+        return readerClient.list(0, 100);
+    }
+
+    Medium get(UUID id) {
+        return readerClient.get(id);
     }
 }

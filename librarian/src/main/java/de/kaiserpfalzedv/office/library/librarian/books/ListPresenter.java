@@ -15,36 +15,47 @@
 
 package de.kaiserpfalzedv.office.library.librarian.books;
 
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-import de.kaiserpfalzedv.office.library.librarian.LibrarianLayout;
 import de.kaiserpfalzedv.office.library.model.Medium;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
 
 /**
- * ListView --
+ * ListPresenter --
  *
  * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
- * @since 2.0.0  2022-07-23
+ * @since 2.0.0  2022-08-14
  */
 @Slf4j
-@Route(value = "", layout = LibrarianLayout.class)
-@PageTitle("Books | Paladins Inn Library")
-public class ListView extends VerticalLayout {
-    private ListPresenter presenter;
+@Dependent
+public class ListPresenter {
+
+    private MediumReaderService readerService;
+
+    private List<Medium> data;
+    private Medium medium;
 
     @Inject
-    public ListView(ListPresenter presenter) {
-        this.presenter = presenter;
-        log.info("ListView created. presenter={}", presenter);
+    public ListPresenter(MediumReaderService readerService) {
+        this.readerService = readerService;
+    }
 
-        if (presenter != null) {
-            for (Medium m : presenter.data()) {
-                add(m.getName());
-            }
+    List<Medium> data() {
+        if (data == null) {
+            data = readerService.list();
         }
+        return data;
+    }
+
+    Medium get(@NotNull UUID id) {
+        if (medium == null) {
+            medium = readerService.get(id);
+        }
+
+        return medium;
     }
 }

@@ -127,7 +127,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>kp-office-libraray-data</artifactId>
+                <artifactId>kp-office-library-data</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

@@ -15,9 +15,7 @@
 
 package de.kaiserpfalzedv.office.library.medium;
 
-import de.kaiserpfalzedv.office.library.location.LocationRepository;
 import de.kaiserpfalzedv.office.library.model.Medium;
-import de.kaiserpfalzedv.office.library.model.MediumLocation;
 import de.kaiserpfalzedv.office.library.security.ApplicationRoles;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +23,12 @@ import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -58,15 +53,14 @@ import java.util.UUID;
 @Timed
 public class MediumCommandResource {
     final MediumRepository repository;
+    final MediumMapper mapper;
 
     @Transactional
     @POST
     public Medium create(Medium medium) {
-        repository.persist(medium);
+        repository.persist(mapper.toEntity(medium));
 
-        Optional<Medium> result = repository.findByIdOptional(medium.getId());
-
-        return result.orElse(null);
+        return mapper.toResource(repository.findByIdOptional(medium.getId()).orElse(null));
     }
 
     @Transactional
@@ -83,7 +77,7 @@ public class MediumCommandResource {
             final UUID id,
 
             @NotNull final Medium medium) {
-        Medium result = repository
+        de.kaiserpfalzedv.office.library.medium.Medium result = repository
                 .findByIdOptional(id)
                 .orElseThrow(NotFoundException::new);
 
@@ -94,7 +88,7 @@ public class MediumCommandResource {
 
         result.persistAndFlush();
 
-        return result;
+        return mapper.toResource(result);
     }
 
     @Transactional

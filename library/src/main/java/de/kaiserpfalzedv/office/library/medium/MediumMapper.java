@@ -15,12 +15,25 @@
 
 package de.kaiserpfalzedv.office.library.medium;
 
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import de.kaiserpfalzedv.office.library.QuarkusMappingConfig;
+import de.kaiserpfalzedv.office.library.location.MediumLocationMapper;
+import de.kaiserpfalzedv.office.library.mediumtype.MediumTypeMapper;
+import de.kaiserpfalzedv.office.library.model.Medium;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import javax.enterprise.context.ApplicationScoped;
-import java.util.UUID;
+/**
+ * MediumMapper --
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.0.0  2022-08-14
+ */
+@Mapper(
+        config = QuarkusMappingConfig.class,
+        uses = {MediumTypeMapper.class, MediumLocationMapper.class}
+)
+public interface MediumMapper {
+    Medium toResource(de.kaiserpfalzedv.office.library.medium.Medium medium);
 
-@ApplicationScoped
-public class MediumRepository implements PanacheRepositoryBase<Medium, UUID> {
-
+    de.kaiserpfalzedv.office.library.medium.Medium toEntity(Medium medium);
 }

@@ -19,14 +19,19 @@ quarkus:
 
 "%dev": &dev
   quarkus:
-    http:
+    http: &dev-http
       port: 8091
       test-port: 8091
       ssl-port: 8453
       test-ssl-port: 8453
 
-    log:
+    log: &dev-log
       console:
         json: false
 
-"%test": *dev
+"%test":
+  quarkus:
+    http: *dev-http
+    log: *dev-log
+    oidc:
+      enabled: false

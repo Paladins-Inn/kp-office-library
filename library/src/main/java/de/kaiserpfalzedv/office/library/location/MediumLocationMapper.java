@@ -13,20 +13,21 @@
  * see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.office.library.mediumtype;
+package de.kaiserpfalzedv.office.library.location;
 
-import de.kaiserpfalzedv.office.library.location.MediumLocation;
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import io.quarkus.panache.common.Parameters;
+import de.kaiserpfalzedv.office.library.QuarkusMappingConfig;
+import de.kaiserpfalzedv.office.library.model.MediumLocation;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import javax.enterprise.context.ApplicationScoped;
-import java.util.Optional;
-import java.util.UUID;
-
-@ApplicationScoped
-public class MediumTypeRepository implements PanacheRepositoryBase<MediumType, UUID> {
-    public Optional<MediumType> findByName(final String name) {
-        return MediumLocation.find("name = :name", Parameters.with("name", name))
-                .singleResultOptional();
-    }
+/**
+ * MediumLocationMapper --
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 1.0.0  2022-08-14
+ */
+@Mapper(config = QuarkusMappingConfig.class)
+public interface MediumLocationMapper {
+    MediumLocation toResource(de.kaiserpfalzedv.office.library.location.MediumLocation location);
+    de.kaiserpfalzedv.office.library.location.MediumLocation toEntity(MediumLocation location);
 }

@@ -15,7 +15,6 @@
 
 package de.kaiserpfalzedv.office.library.location;
 
-import de.kaiserpfalzedv.office.library.model.MediumLocation;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
 

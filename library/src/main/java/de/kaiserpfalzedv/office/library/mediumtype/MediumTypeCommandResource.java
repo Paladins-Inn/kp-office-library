@@ -15,8 +15,6 @@
 
 package de.kaiserpfalzedv.office.library.mediumtype;
 
-import de.kaiserpfalzedv.office.library.location.LocationRepository;
-import de.kaiserpfalzedv.office.library.model.MediumLocation;
 import de.kaiserpfalzedv.office.library.model.MediumType;
 import de.kaiserpfalzedv.office.library.security.ApplicationRoles;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +23,6 @@ import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
@@ -33,7 +30,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -58,6 +54,7 @@ import java.util.UUID;
 @Timed
 public class MediumTypeCommandResource {
     final MediumTypeRepository repository;
+    final MediumTypeMapper mapper;
 
     @Transactional
     @POST
@@ -76,14 +73,12 @@ public class MediumTypeCommandResource {
             final String name
     ) {
         repository.persist(
-                MediumType.builder()
+                de.kaiserpfalzedv.office.library.mediumtype.MediumType.builder()
                         .name(name)
                         .build()
         );
 
-        Optional<MediumType> result = repository.findByName(name);
-
-        return result.orElse(null);
+        return mapper.toResource(repository.findByName(name).orElse(null));
     }
 
     @Transactional
@@ -110,14 +105,14 @@ public class MediumTypeCommandResource {
             @NotNull
             @Size(min = 1, max = 255)
             final String name) {
-        MediumType result = repository
+        de.kaiserpfalzedv.office.library.mediumtype.MediumType result = repository
                 .findByIdOptional(id)
                 .orElseThrow(NotFoundException::new);
 
         result.setName(name);
         result.persistAndFlush();
 
-        return result;
+        return mapper.toResource(result);
     }
 
     @Transactional

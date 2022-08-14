@@ -27,16 +27,12 @@
     </parent>
 
     <name>KP Office :: Library :: Data</name>
-    <artifactId>kp-office-libraray-data</artifactId>
+    <artifactId>kp-office-library-data</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-orm-panache</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>

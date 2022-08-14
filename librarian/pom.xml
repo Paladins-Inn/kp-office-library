@@ -73,6 +73,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>de.kaiserpfalz-edv.office.library</groupId>
+            <artifactId>kp-office-library-data</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-hibernate-orm-panache</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-quarkus-extension</artifactId>
             <version>${vaadin.version}</version>
@@ -143,7 +154,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-common</artifactId>
-            <version>4.1.77.Final</version>
+            <version>4.1.79.Final</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>

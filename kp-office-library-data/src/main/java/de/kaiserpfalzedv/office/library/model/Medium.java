@@ -17,14 +17,9 @@ package de.kaiserpfalzedv.office.library.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -41,8 +36,6 @@ import javax.validation.constraints.Size;
 @Data
 @Jacksonized
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-@Table(name = "mediums")
 public class Medium extends OfficeBaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -54,7 +47,6 @@ public class Medium extends OfficeBaseEntity {
             example = "Torg Eternity - Core Rules",
             required = true
     )
-    @Column(length = 255, nullable = false)
     @Size(min = 1, max = 255)
     @NotNull
     private String name;
@@ -67,7 +59,6 @@ public class Medium extends OfficeBaseEntity {
             example = "This book contains all rules necessary for playing Torg Eternity.",
             required = false
     )
-    @Column(length = 1000)
     @Size(min = 1, max = 1000)
     private String description;
 
@@ -79,7 +70,6 @@ public class Medium extends OfficeBaseEntity {
             example = "https://d1vzi28wh99zvq.cloudfront.net/images/3444/216248-thumb140.jpg",
             required = false
     )
-    @Column(length = 500)
     @Size(min = 1, max = 500)
     private String cover;
 
@@ -88,7 +78,6 @@ public class Medium extends OfficeBaseEntity {
             required = false
     )
     @ToString.Exclude
-    @ManyToOne(optional = false)
     private MediumType mediumtype;
 
     @Schema(
@@ -96,6 +85,5 @@ public class Medium extends OfficeBaseEntity {
             required = false
     )
     @ToString.Exclude
-    @ManyToOne(optional = false)
     private MediumLocation mediumlocation;
 }

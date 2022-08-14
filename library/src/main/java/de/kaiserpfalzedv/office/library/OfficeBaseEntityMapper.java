@@ -13,20 +13,20 @@
  * see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.office.library.mediumtype;
+package de.kaiserpfalzedv.office.library;
 
-import de.kaiserpfalzedv.office.library.location.MediumLocation;
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import io.quarkus.panache.common.Parameters;
+import de.kaiserpfalzedv.office.library.model.OfficeBaseEntity;
+import org.mapstruct.Mapper;
 
-import javax.enterprise.context.ApplicationScoped;
-import java.util.Optional;
-import java.util.UUID;
+/**
+ * OfficeBaseEntityMapper --
+ *
+ * @author klenkes74 {@literal <rlichti@kaiserpfalz-edv.de>}
+ * @since 2.0.0  2022-08-14
+ */
+@Mapper(config = QuarkusMappingConfig.class)
+public interface OfficeBaseEntityMapper {
+    OfficeBaseEntity toResource(de.kaiserpfalzedv.office.library.OfficeBaseEntity base);
 
-@ApplicationScoped
-public class MediumTypeRepository implements PanacheRepositoryBase<MediumType, UUID> {
-    public Optional<MediumType> findByName(final String name) {
-        return MediumLocation.find("name = :name", Parameters.with("name", name))
-                .singleResultOptional();
-    }
+    de.kaiserpfalzedv.office.library.OfficeBaseEntity toEntity(OfficeBaseEntity base);
 }

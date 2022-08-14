@@ -13,20 +13,24 @@
  * see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.office.library.model;
+package de.kaiserpfalzedv.office.library.location;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import de.kaiserpfalzedv.office.library.OfficeBaseEntity;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Schema(
-        title = "MediumType",
-        name = "MediumType",
-        description = "Type of the medium"
+        title = "MediumLocations",
+        name = "MediumLocations",
+        description = "Location of the medium within the library."
 )
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,17 +39,20 @@ import javax.validation.constraints.Size;
 @ToString(callSuper = true)
 @Jacksonized
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MediumType extends OfficeBaseEntity {
+@Entity
+@Table(name = "mediumlocations")
+public class MediumLocation extends OfficeBaseEntity {
     private static final long serialVersionUID = 1L;
 
     @Schema(
             name = "name",
-            description = "Name of the medium type",
+            description = "Name of the location",
             maxLength = 255,
             minLength = 1,
             required = true
     )
     @Size(min = 1, max = 255)
     @NotNull
+    @Column(length = 255, nullable = false, unique = true)
     private String name;
 }

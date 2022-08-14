@@ -13,13 +13,17 @@
  * see <https://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.office.library.model;
+package de.kaiserpfalzedv.office.library.mediumtype;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import de.kaiserpfalzedv.office.library.OfficeBaseEntity;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -35,6 +39,8 @@ import javax.validation.constraints.Size;
 @ToString(callSuper = true)
 @Jacksonized
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
+@Table(name = "mediumtypes")
 public class MediumType extends OfficeBaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -47,5 +53,6 @@ public class MediumType extends OfficeBaseEntity {
     )
     @Size(min = 1, max = 255)
     @NotNull
+    @Column(length = 255, nullable = false)
     private String name;
 }
